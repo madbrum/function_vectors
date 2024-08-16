@@ -6,7 +6,7 @@ import random
 from typing import *
 
 
-def load_gpt_model_and_tokenizer(model_name:str, device='cuda'):
+def load_gpt_model_and_tokenizer(model_name:str, device='cuda', hf_token=None):
     """
     Loads a huggingface model and its tokenizer
 
@@ -103,8 +103,8 @@ def load_gpt_model_and_tokenizer(model_name:str, device='cuda'):
             # model = LlamaForCausalLM.from_pretrained(model_name, torch_dtype=model_dtype).to(device)
 
             # If transformers version is >= 4.31, use AutoLoaders
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
-            model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=model_dtype).to(device)
+            tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+            model = AutoModelForCausalLM.from_pretrained(model_name, device_map=device, torch_dtype=model_dtype, token=hf_token)#.to(device)
 
         MODEL_CONFIG={"n_heads":model.config.num_attention_heads,
                       "n_layers":model.config.num_hidden_layers,
