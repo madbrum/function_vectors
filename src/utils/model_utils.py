@@ -103,7 +103,8 @@ def load_gpt_model_and_tokenizer(model_name:str, device='cuda', hf_token=None):
             # model = LlamaForCausalLM.from_pretrained(model_name, torch_dtype=model_dtype).to(device)
 
             # If transformers version is >= 4.31, use AutoLoaders
-            tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+            tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token, padding_side='left')
+            tokenizer.pad_token = tokenizer.eos_token
             model = AutoModelForCausalLM.from_pretrained(model_name, device_map=device, torch_dtype=model_dtype, token=hf_token)#.to(device)
 
         MODEL_CONFIG={"n_heads":model.config.num_attention_heads,
