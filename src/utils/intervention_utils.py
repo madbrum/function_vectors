@@ -155,7 +155,7 @@ def function_vector_intervention(sentence, target, edit_layer, function_vector, 
         intervention_idx = -1 - target_len
     elif generate_str:
         MAX_NEW_TOKENS = 16
-        output = model.generate(inputs.input_ids, top_p=0.9, temperature=0.1,
+        output = model.generate(inputs.input_ids, attention_mask=inputs.attention_mask, top_p=0.9, temperature=0.1,
                                 max_new_tokens=MAX_NEW_TOKENS)
         clean_output = tokenizer.decode(output.squeeze()[-MAX_NEW_TOKENS:])
         intervention_idx = -1
@@ -171,7 +171,7 @@ def function_vector_intervention(sentence, target, edit_layer, function_vector, 
             intervention_nll = output.loss.item()
             intervention_output = output.logits[:,original_pred_idx,:]
         elif generate_str:
-            output = model.generate(inputs.input_ids, top_p=0.9, temperature=0.1,
+            output = model.generate(input_ids=inputs.input_ids, attention_mask=inputs.attention_mask, top_p=0.9, temperature=0.1,
                                     max_new_tokens=MAX_NEW_TOKENS)
             intervention_output = tokenizer.decode(output.squeeze()[-MAX_NEW_TOKENS:])
         else:

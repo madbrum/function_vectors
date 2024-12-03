@@ -51,8 +51,8 @@ def load_gpt_model_and_tokenizer(model_name:str, device='cuda', hf_token=None):
                       "prepend_bos":False}
 
     elif 'gpt-neox' in model_name.lower() or 'pythia' in model_name.lower():
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side='left')
+        tokenizer.pad_token_id = tokenizer.eos_token_id
         model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
 
         MODEL_CONFIG={"n_heads":model.config.num_attention_heads,

@@ -407,7 +407,8 @@ def split_icl_dataset(dataset, train_size=None, test_size=0.3, seed=42) -> Dict[
 def load_dataset(task_name: str,
                  root_data_dir: str = '../dataset_files',
                  test_size = 0.3, 
-                 seed=32
+                 seed=32,
+                 dataset_dict: dict = None
                 ) -> Dict[str,ICLDataset]:
     """
     Loads a dataset with input/output pairs
@@ -416,10 +417,15 @@ def load_dataset(task_name: str,
     task_name: the name of the task dataset
     root_data_dir: the root directory where the data comes from
     test_size: fraction used in train/test split
+    dataset_dict: Optional, loaded dataset dictionary with input, output pairs
     
     Return:
     dataset: the dict contain the train/valid/test dataset splits
     """
+    if dataset_dict is not None:
+        dataset = ICLDataset(dataset_dict)
+        dataset = split_icl_dataset(dataset, test_size=test_size, seed=seed)
+        return dataset
 
     data_folders = ['abstractive', 'extractive']
     assert test_size <= 1.0
